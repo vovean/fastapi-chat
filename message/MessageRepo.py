@@ -1,21 +1,22 @@
 from asyncpg import Connection
 
-from message import Message
+from message import DBMessage
+from message.messages import RequestMessage
 
 
 class MessageRepo:
     def __init__(self, conn: Connection):
         self.conn = conn
 
-    async def insert(self, message: Message) -> Message:
+    async def insert(self, message: RequestMessage) -> DBMessage:
         sql = '''INSERT INTO 
-        messages (order_id, sender_token, text)
-        VALUES ($1, $2, $2) 
+        messages (order_id, sender_role, text)
+        VALUES ($1, $2, $3) 
         RETURNING *'''
         message_saved: dict = await self.conn.fetchrow(
             sql,
             message.order_id,
-            message.sender_token,
+            message.sender_role.value,
             message.text
         )
-        return Message(**message_saved)
+        return DBMessage(**message_saved)

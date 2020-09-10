@@ -27,3 +27,8 @@ class OrderKeySetRepo:
         sql = '''DELETE FROM orderkeyset WHERE order_id = $1'''
         deleted = await self.conn.fetch(sql, order_id)
         return deleted
+
+    async def get_by_order_id(self, order_id: int) -> OrderKeySet:
+        sql = '''SELECT * FROM orderkeyset WHERE order_id=$1'''
+        oks: dict = await self.conn.fetchrow(sql, order_id)
+        return OrderKeySet(**oks)

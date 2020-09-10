@@ -1,4 +1,4 @@
-"""create Message
+"""create DBMessage
 
 Revision ID: 63d833b96a44
 Revises: 283d7d7fdf1e
@@ -10,6 +10,7 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 from sqlalchemy import ForeignKey
+from sqlalchemy.sql import expression
 
 revision = '63d833b96a44'
 down_revision = '283d7d7fdf1e'
@@ -22,7 +23,8 @@ def upgrade():
         'messages',
         sa.Column('id', sa.Integer, primary_key=True),
         sa.Column('order_id', sa.Integer, ForeignKey('orderkeyset.order_id')),
-        sa.Column('sender_token', sa.String(20)),
+        sa.Column('sender_role', sa.String(20)),
+        sa.Column('watched', sa.Boolean, server_default=expression.false(), nullable=False),
         sa.Column('sent_at', sa.DateTime, server_default=sa.func.current_timestamp()),
         sa.Column('text', sa.String(300)),
     )
