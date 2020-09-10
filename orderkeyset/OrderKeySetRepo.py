@@ -3,8 +3,7 @@ from asyncpg import Connection
 from orderkeyset import OrderKeySet
 
 
-class OrderKeySetRepo():
-    _table = 'orderkeyset'
+class OrderKeySetRepo:
 
     def __init__(self, conn: Connection):
         self.conn = conn
