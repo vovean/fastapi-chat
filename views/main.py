@@ -23,7 +23,7 @@ app.add_middleware(ConnectionMiddleware)
 
 routers = {
     "/oks": oks_router,
-    "/messages": message_router
+    "/order_chat": message_router
 }
 
 for prefix, router in routers.items():

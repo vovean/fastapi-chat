@@ -24,7 +24,7 @@ def upgrade():
         sa.Column('id', sa.Integer, primary_key=True),
         sa.Column('order_id', sa.Integer, ForeignKey('orderkeyset.order_id')),
         sa.Column('sender_role', sa.String(20)),
-        sa.Column('receiver_role', sa.String(20)),
+        sa.Column('chat_type', sa.String(20)),
         sa.Column('watched', sa.Boolean, server_default=expression.false(), nullable=False),
         sa.Column('sent_at', sa.DateTime, server_default=sa.func.current_timestamp()),
         sa.Column('text', sa.String(300)),
