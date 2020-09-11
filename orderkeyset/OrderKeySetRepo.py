@@ -1,4 +1,7 @@
+from typing import Optional
+
 from asyncpg import Connection
+from fastapi import HTTPException
 
 from orderkeyset import OrderKeySet
 
@@ -30,5 +33,7 @@ class OrderKeySetRepo:
 
     async def get_by_order_id(self, order_id: int) -> OrderKeySet:
         sql = '''SELECT * FROM orderkeyset WHERE order_id=$1'''
-        oks: dict = await self.conn.fetchrow(sql, order_id)
+        oks: Optional[dict] = await self.conn.fetchrow(sql, order_id)
+        if oks is None:
+            raise HTTPException(status_code=404, detail=f"Order with id={order_id} not found")
         return OrderKeySet(**oks)

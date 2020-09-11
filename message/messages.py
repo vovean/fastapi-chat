@@ -4,7 +4,7 @@ from enum import Enum
 from pydantic import BaseModel
 
 
-class SenderRole(Enum):
+class ChatRole(str, Enum):
     DISPATCHER = 'DSPTCHR'
     DRIVER = 'DRVR'
     CUSTOMER = 'CSTMR'
@@ -12,13 +12,15 @@ class SenderRole(Enum):
 
 class RequestMessage(BaseModel):
     order_id: int
-    sender_role: SenderRole
+    sender_role: ChatRole
+    receiver_role: ChatRole
     text: str
 
 
 class DBMessage(BaseModel):
     id: int
     order_id: int
-    sender_role: SenderRole
+    sender_role: ChatRole
+    receiver_role: ChatRole
     sent_at: datetime
     text: str
