@@ -1,5 +1,6 @@
 from datetime import datetime
 from enum import Enum
+from typing import List, Optional
 
 from pydantic import BaseModel
 
@@ -30,3 +31,9 @@ class DBMessage(BaseModel):
     chat_type: ChatType  # [ DC, CC ]
     sent_at: datetime
     text: str
+
+
+class ChatMessages(BaseModel):
+    messages: List[DBMessage]
+    last_read_id: Optional[int]
+    unread_count: int

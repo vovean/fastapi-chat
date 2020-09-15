@@ -20,7 +20,7 @@ class Notifier:
     async def notify(self, message: DBMessage):
         # check existing order
         if not self.connections.get(message.order_id):
-            raise Exception(f"No subscriptions for order {message.order_id}")
+            self.connections[message.order_id] = dict()
         # add dispatcher to receivers
         connections: Dict[ChatRole, WebSocket] = {
             ChatRole.DISPATCHER: self.connections[message.order_id].get(ChatRole.DISPATCHER)

@@ -1,2 +1,2 @@
-from .messages import DBMessage, RequestMessage, ChatType, ChatRole
+from .messages import DBMessage, RequestMessage, ChatType, ChatRole, ChatMessages
 from .MessageRepo import MessageRepo
