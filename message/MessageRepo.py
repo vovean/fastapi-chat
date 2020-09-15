@@ -28,12 +28,15 @@ class MessageRepo:
             self,
             order_id: int,
             chat_with: ChatType,
+            limit: int = 10,
+            offset: int = 0
     ) -> List[DBMessage]:
-        sql = '''
+        sql = f'''
         SELECT * FROM messages WHERE 
             order_id=$1 AND 
             chat_type=$2
-        ORDER BY sent_at DESC;'''
+        ORDER BY sent_at DESC
+        LIMIT {limit} OFFSET {offset}'''
         rows: List[dict] = await self.conn.fetch(sql, order_id, chat_with.value)
         dbms: List[DBMessage] = [DBMessage(**row) for row in rows]
         return dbms

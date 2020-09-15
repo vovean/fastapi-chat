@@ -1,10 +1,9 @@
 from asyncpg import Connection
-from fastapi import Body, APIRouter
-from starlette.requests import Request
+from fastapi import Body, APIRouter, Depends
 
-from database.postgres import PostgresDB
 from orderkeyset import OrderKeySet
 from orderkeyset.OrderKeySetRepo import OrderKeySetRepo
+from views.dependencies import get_conn
 
 router = APIRouter()
 
@@ -13,15 +12,15 @@ router = APIRouter()
 async def create_order(
         *,
         oks: OrderKeySet = Body(...),
-        request: Request
+        conn: Connection = Depends(get_conn)
 ):
-    oks_repo = OrderKeySetRepo(request.state.conn)
+    oks_repo = OrderKeySetRepo(conn)
     inserted = await oks_repo.insert(oks)
     return inserted
 
 
 @router.delete('/order/{order_id}')
-async def delete_order(order_id: int, request: Request):
-    oks_repo = OrderKeySetRepo(request.state.conn)
+async def delete_order(order_id: int, conn: Connection = Depends(get_conn)):
+    oks_repo = OrderKeySetRepo(conn)
     deleted = await oks_repo.delete(order_id)
     return deleted
