@@ -2,6 +2,7 @@ from fastapi import HTTPException
 
 from message import ChatRole, ChatType
 from orderkeyset import OrderKeySet
+from settings import get_settings
 
 
 def get_sender(oks: OrderKeySet, token: str):
@@ -9,6 +10,7 @@ def get_sender(oks: OrderKeySet, token: str):
         oks.dispatcher_key: ChatRole.DISPATCHER,
         oks.driver_key: ChatRole.DRIVER,
         oks.customer_key: ChatRole.CUSTOMER,
+        get_settings().system_token: ChatRole.SYSTEM
     }
     if token not in token2role:
         raise HTTPException(status_code=403, detail="Invalid X-Token")

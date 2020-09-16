@@ -245,3 +245,5 @@ db/data
 db/db.env
 alembic.ini
 test_requests.http
+files
+.env

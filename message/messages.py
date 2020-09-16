@@ -31,6 +31,7 @@ class DBMessage(BaseModel):
     chat_type: ChatType  # [ DC, CC ]
     sent_at: datetime
     text: str
+    file_path: Optional[str]
 
 
 class ChatMessages(BaseModel):

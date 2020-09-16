@@ -59,16 +59,21 @@ class MessageRepo:
         unread_count = await self.conn.fetchval(sql_count_unread, order_id, chat.value, last_read_message)
         return unread_count
 
-    async def read_message(self, reader: ChatRole, message: DBMessage):
+    async def read_message(self, reader: ChatRole, message: DBMessage) -> int:
         sql = '''
         INSERT INTO read_messages (order_id, chat_type, role, last_read_message_id)  
         VALUES ($1, $2, $3, $4) ON CONFLICT (order_id, chat_type, role) DO UPDATE SET last_read_message_id=$4
         RETURNING last_read_message_id'''
         return await self.conn.fetchval(sql, message.order_id, message.chat_type.value, reader.value, message.id)
 
-    async def get_last_read_message(self, order_id: int, chat: ChatType, role: ChatRole):
+    async def get_last_read_message_id(self, order_id: int, chat: ChatType, role: ChatRole) -> int:
         return await self.conn.fetchval('''SELECT last_read_message_id FROM read_messages WHERE 
                                             order_id=$1 AND
                                             chat_type=$2 AND
                                             role=$3''',
                                         order_id, chat.value, role.value)
+
+    async def set_file(self, message_id: int, file: str) -> DBMessage:
+        msg = await self.conn.fetchrow('''UPDATE messages SET file_path=$1 WHERE 
+                                            id=$2 RETURNING *''', file, message_id)
+        return DBMessage(**msg)
