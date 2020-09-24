@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from database.postgres import PostgresDB
 from views.message_views import router as message_router
@@ -26,3 +27,11 @@ routers = {
 
 for prefix, router in routers.items():
     app.include_router(router, prefix=prefix)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*'],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
