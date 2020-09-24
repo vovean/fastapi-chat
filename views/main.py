@@ -27,11 +27,3 @@ routers = {
 
 for prefix, router in routers.items():
     app.include_router(router, prefix=prefix)
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=['*'],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
