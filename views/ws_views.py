@@ -1,5 +1,5 @@
 from asyncpg import Connection
-from fastapi import APIRouter, Path, Header, HTTPException, Depends
+from fastapi import APIRouter, Path, Header, HTTPException, Depends, Query
 from starlette.websockets import WebSocket, WebSocketDisconnect
 
 from orderkeyset.OrderKeySetRepo import OrderKeySetRepo
@@ -14,7 +14,7 @@ router = APIRouter()
 async def subscribe(
         *,
         order_id: int = Path(...),
-        x_token: str = Header(None),
+        x_token: str = Query(...),
         ws: WebSocket,
         conn: Connection = Depends(get_conn)
 ):
