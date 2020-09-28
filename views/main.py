@@ -8,6 +8,11 @@ from views.ws_views import router as ws_router
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*'],
+)
+
 
 @app.on_event("startup")
 async def on_startup():
