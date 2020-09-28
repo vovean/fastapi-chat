@@ -37,7 +37,7 @@ class Notifier:
                 if conn:
                     await conn.send_json(message.json())
                     self.connections[message.order_id][role] = conn
-            except RuntimeError:
+            except:
                 self.remove(message.order_id, role)
 
 
