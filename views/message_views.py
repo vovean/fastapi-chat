@@ -21,7 +21,7 @@ async def send_message(
         order_id: int = Path(...),
         chat_type: ChatType = Path(...),
         text: str = Body(..., embed=True),
-        file=File(...),
+        file=File(None),
         x_token: str = Header(None),
         conn: Connection = Depends(get_conn)
 ):
@@ -36,15 +36,16 @@ async def send_message(
         chat_type=chat_type,
         text=text
     )
-    msg_saved = await msg_repo.insert(message)
+    updated_msg = await msg_repo.insert(message)
     # save file
-    data = await file.read()
-    name = f"{hashlib.md5(f'{msg_saved.id}.{file.filename}'.encode()).hexdigest()}{os.path.splitext(file.filename)[-1]}"
-    path = fr"files/{name}"
-    async with aiofiles.open(path, "wb") as f:
-        await f.write(data)
-    # update db record
-    updated_msg = await msg_repo.set_file(msg_saved.id, path)
+    if file is not None:
+        data = await file.read()
+        name = f"{hashlib.md5(f'{updated_msg.id}.{file.filename}'.encode()).hexdigest()}{os.path.splitext(file.filename)[-1]}"
+        path = fr"files/{name}"
+        async with aiofiles.open(path, "wb") as f:
+            await f.write(data)
+        # update db record
+        updated_msg = await msg_repo.set_file(updated_msg.id, path)
     await notifier.notify(updated_msg)
     await msg_repo.read_message(sender_role, updated_msg)
     return updated_msg
